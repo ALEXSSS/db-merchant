@@ -1,18 +1,22 @@
 package db.merchant.controller;
 
+import db.merchant.signal.SignalHandler;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/signal")
-class SignalController {
+public class SignalController {
 
-    @GetMapping
+    private final SignalHandler signalHandler;
+
+    public SignalController(SignalHandler signalHandler) {
+        this.signalHandler = signalHandler;
+    }
+
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void process() {
-
+    public void handleSignal(@PathVariable Integer id) {
+        signalHandler.handleSignal(id);
     }
 }

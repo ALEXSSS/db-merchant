@@ -1,0 +1,13 @@
+db.merchant.executor.queue-capacity: 1000
+spring:
+  application:
+    name: db-merchant
+  datasource:
+    name: opportunity
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 1 # only initial read at application start-up
+      connection-timeout: 10000 # 10 sec
