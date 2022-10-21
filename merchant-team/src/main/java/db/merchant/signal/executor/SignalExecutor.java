@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 @Component
 public class SignalExecutor {
 
-    public static volatile ExecutorService executor;
+    public final ExecutorService executor;
 
     public SignalExecutor(SignalExecutorProperties properties) {
         // assuming that signal processing is mostly a CPU bounded task
@@ -37,7 +37,7 @@ public class SignalExecutor {
         }
 
         public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
-            // todo log
+            // if queue is depleted we reject newly arriving request with proper status code
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS);
         }
     }

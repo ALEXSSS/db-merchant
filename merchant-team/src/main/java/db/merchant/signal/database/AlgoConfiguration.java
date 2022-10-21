@@ -10,6 +10,9 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.List;
 
+/**
+ * Database entity description, containing steps to run a particular handler.
+ */
 @Table
 public class AlgoConfiguration {
     @Id

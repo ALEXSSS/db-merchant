@@ -9,5 +9,5 @@ spring:
     password: postgres
     driverClassName: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 1 # only initial read at application start-up
+      maximum-pool-size: 1 # now only one active session
       connection-timeout: 10000 # 10 sec

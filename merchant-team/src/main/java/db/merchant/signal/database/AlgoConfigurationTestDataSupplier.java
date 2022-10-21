@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Populates database with algo configurations
+ * Populates database with algo configurations for local envs.
  */
 @Profile("!prod") // just to illustrate that this is for local env
 @Component

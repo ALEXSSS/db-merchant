@@ -1,24 +1,29 @@
 package db.merchant.signal.database;
 
 import db.algo.Algo;
-import db.merchant.signal.DomainSpecificSignalHandler;
+import db.merchant.signal.DomainSpecificSignalHandlerDispatcher;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Dispatches signal among persisted configurations.
+ * <p>
+ * This dispatcher is created to support handlers specified mostly by analysts (not dev team).
+ */
 @Component
-public class DatabaseSignalHandler implements DomainSpecificSignalHandler {
+public class DatabaseSignalHandlerDispatcher implements DomainSpecificSignalHandlerDispatcher {
 
     /**
-     * map after initialization is read-only, therefore it is thread-safe to use it
+     * after initialization is read-only, therefore it is thread-safe to use it
      */
     private volatile Map<Integer, AlgoConfiguration> configurations = new HashMap<>();
     private final Algo algo;
     private final AlgoConfigurationRepository repository;
 
-    public DatabaseSignalHandler(Algo algo, AlgoConfigurationRepository repository) {
+    public DatabaseSignalHandlerDispatcher(Algo algo, AlgoConfigurationRepository repository) {
         this.algo = algo;
         this.repository = repository;
     }
@@ -41,7 +46,6 @@ public class DatabaseSignalHandler implements DomainSpecificSignalHandler {
     }
 
     private void runAlgoByDatabaseConfiguration(AlgoConfiguration configuration) {
-        configuration.getSteps().getSteps()
-                .forEach((step) -> step.handle(algo));
+        configuration.getSteps().getSteps().forEach((step) -> step.handle(algo));
     }
 }

@@ -1,6 +1,6 @@
 package db.merchant.signal.codebase;
 
-import db.merchant.signal.DomainSpecificSignalHandler;
+import db.merchant.signal.DomainSpecificSignalHandlerDispatcher;
 import db.merchant.signal.codebase.handlers.AbstractCodebaseSignalHandler;
 import org.springframework.stereotype.Component;
 
@@ -11,16 +11,15 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
-// todo
+/**
+ * Collects all dev team defined handlers, and dispatches signals among them
+ */
 @Component
-public class CodeBasedSignalHandler implements DomainSpecificSignalHandler {
+public class CodeBasedSignalHandlerDispatcher implements DomainSpecificSignalHandlerDispatcher {
 
-    /**
-     * map after initialization is read-only, therefore it is thread-safe to use it
-     */
     private final Map<Integer, AbstractCodebaseSignalHandler> handlers;
 
-    public CodeBasedSignalHandler(List<AbstractCodebaseSignalHandler> handlers) {
+    public CodeBasedSignalHandlerDispatcher(List<AbstractCodebaseSignalHandler> handlers) {
         // check that there are no repetitions of signal ids, during bootstrap of app
         this.handlers = handlers.stream()
                 .collect(groupingBy(AbstractCodebaseSignalHandler::getSignalId))

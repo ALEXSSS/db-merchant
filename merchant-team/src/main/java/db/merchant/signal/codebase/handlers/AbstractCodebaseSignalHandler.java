@@ -14,29 +14,40 @@ public abstract class AbstractCodebaseSignalHandler {
 
     public abstract void handleSignal();
 
+    /**
+     * Must be unique among all signal handlers.
+     * FUTURE WORK: consider usage of the jira task name (String instead of int)
+     *
+     * @return unique signal id
+     */
     public abstract int getSignalId();
 
-    // todo private
     @Autowired
-    public void setAlgo(Algo algo) {
+    private void setAlgo(Algo algo) {
         AbstractCodebaseSignalHandler.algo = algo;
     }
 
     // some additional info which can be used for monitoring
 
-    // todo
-    String getTask() {
+    /**
+     * @return name of the associated jira task
+     */
+    public String getTask() {
         String[] packageName = this.getClass().getPackageName().split("\\.");
         return packageName[packageName.length - 1];
     }
 
-    // todo
-    String getAuthor() {
+    /**
+     * @return author of this handler
+     */
+    public String getAuthor() {
         return "NOT SPECIFIED";
     }
 
-    // todo
-    String getDescription() {
+    /**
+     * @return optional description shortly describing used approach
+     */
+    public String getDescription() {
         return "NOT SPECIFIED";
     }
 }

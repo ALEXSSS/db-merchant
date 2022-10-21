@@ -18,22 +18,25 @@ import java.util.stream.Collectors;
 // todo add comment
 @Primary
 @Component
-public class CompositeSignalHandler implements DomainSpecificSignalHandler, InitializingBean {
+public class CompositeSignalHandlerDispatcher implements DomainSpecificSignalHandlerDispatcher, InitializingBean {
 
-    private final List<DomainSpecificSignalHandler> handlers;
+    private final List<DomainSpecificSignalHandlerDispatcher> handlers;
 
     private volatile Set<Integer> eligibleSignalIds;
 
-    public CompositeSignalHandler(SignalExecutor signalExecutor,
-                                  List<DomainSpecificSignalHandler> handlers) {
+    private final SignalExecutor signalExecutor;
+
+    public CompositeSignalHandlerDispatcher(SignalExecutor signalExecutor,
+                                            List<DomainSpecificSignalHandlerDispatcher> handlers) {
         this.handlers = handlers;
+        this.signalExecutor = signalExecutor;
         localRefreshSignalHandler();
     }
 
     @Override
     public void handleSignal(int signal) {
         if (eligibleSignalIds.contains(signal)) {
-            SignalExecutor.executor.submit(() -> handlers.stream()
+            signalExecutor.executor.submit(() -> handlers.stream()
                     .filter(it -> it.getSignalIds().contains(signal))
                     .findFirst().get() // we ensure presence by if above
                     .handleSignal(signal)
@@ -59,18 +62,18 @@ public class CompositeSignalHandler implements DomainSpecificSignalHandler, Init
 
     @Override
     public void refreshSignalHandler() {
-        handlers.forEach(DomainSpecificSignalHandler::refreshSignalHandler);
+        handlers.forEach(DomainSpecificSignalHandlerDispatcher::refreshSignalHandler);
         localRefreshSignalHandler();
     }
 
     private void localRefreshSignalHandler() {
         List<Integer> allEligibleSignalIds = handlers.stream()
-                .map(DomainSpecificSignalHandler::getSignalIds)
+                .map(DomainSpecificSignalHandlerDispatcher::getSignalIds)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
         eligibleSignalIds = new HashSet<>(allEligibleSignalIds);
         if (allEligibleSignalIds.size() != eligibleSignalIds.size()) {
-            // remove all cannot be used
+            // removeAll() cannot be used
             eligibleSignalIds.forEach(allEligibleSignalIds::remove);
             // todo
         }

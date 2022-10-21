@@ -16,6 +16,9 @@ import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Database necessary configurations
+ */
 @Configuration
 class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
 
@@ -44,6 +47,7 @@ class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
                 jsonObject.setValue(mapper.writeValueAsString(value));
             } catch (Exception e) {
                 // ignore impossible checked exceptions
+                throw new RuntimeException(e);
             }
             return jsonObject;
         }
@@ -62,6 +66,7 @@ class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
                 result = mapper.readValue(value, AlgoConfiguration.AlgoSteps.class);
             } catch (JsonProcessingException e) {
                 // ignore impossible checked exceptions
+                throw new RuntimeException(e);
             }
             return result;
         }
