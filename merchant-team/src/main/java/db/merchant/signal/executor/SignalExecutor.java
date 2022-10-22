@@ -1,7 +1,8 @@
 package db.merchant.signal.executor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,13 +39,14 @@ public class SignalExecutor {
 
         public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
             // if queue is depleted we reject newly arriving request with proper status code
+            if (log.isWarnEnabled()) log.warn("Signal processing task was rejected!");
             throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS);
         }
     }
 
-    // todo log
     @PreDestroy
     public void destroy() {
+        log.info("Signal executor shutdown started!");
         executor.shutdown();
         boolean isTerminated = false;
         try {
@@ -54,5 +56,8 @@ public class SignalExecutor {
         } finally {
             if (!isTerminated) executor.shutdownNow();
         }
+        log.info("Signal executor shutdown completed!");
     }
+
+    private static final Logger log = LoggerFactory.getLogger(SignalExecutor.class);
 }

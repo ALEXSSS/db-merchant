@@ -1,6 +1,8 @@
 package db.merchant.signal;
 
 import db.merchant.signal.executor.SignalExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-// todo add comment
+/**
+ * Combines two strategies for signal processing
+ * 1) code based signal processing -
+ * when configuration is specified in the codebase (mostly dev-team)
+ * 2) database signal processing - when configuration in the database (mostly analysts)
+ */
 @Primary
 @Component
 public class CompositeSignalHandlerDispatcher implements DomainSpecificSignalHandlerDispatcher, InitializingBean {
@@ -26,8 +33,10 @@ public class CompositeSignalHandlerDispatcher implements DomainSpecificSignalHan
 
     private final SignalExecutor signalExecutor;
 
-    public CompositeSignalHandlerDispatcher(SignalExecutor signalExecutor,
-                                            List<DomainSpecificSignalHandlerDispatcher> handlers) {
+    public CompositeSignalHandlerDispatcher(
+            SignalExecutor signalExecutor,
+            List<DomainSpecificSignalHandlerDispatcher> handlers
+    ) {
         this.handlers = handlers;
         this.signalExecutor = signalExecutor;
         localRefreshSignalHandler();
@@ -42,8 +51,7 @@ public class CompositeSignalHandlerDispatcher implements DomainSpecificSignalHan
                     .handleSignal(signal)
             );
         } else {
-            // todo rewrite without abstraction leak
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported signal");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported signal id");
         }
     }
 
@@ -54,14 +62,15 @@ public class CompositeSignalHandlerDispatcher implements DomainSpecificSignalHan
 
     @Override
     public void afterPropertiesSet() {
-        // refresh all nested SignalHandlers
+        // create scheduled task to refresh all nested SignalHandlers
         Executors.newSingleThreadScheduledExecutor(
                 (runnable) -> new Thread(runnable, "Composite handler refresher")
-        ).scheduleWithFixedDelay(this::refreshSignalHandler, 10, 600, TimeUnit.SECONDS);
+        ).scheduleWithFixedDelay(this::refreshSignalHandler, 5, 600, TimeUnit.SECONDS);
     }
 
     @Override
     public void refreshSignalHandler() {
+        // refresh nested handlers
         handlers.forEach(DomainSpecificSignalHandlerDispatcher::refreshSignalHandler);
         localRefreshSignalHandler();
     }
@@ -75,7 +84,11 @@ public class CompositeSignalHandlerDispatcher implements DomainSpecificSignalHan
         if (allEligibleSignalIds.size() != eligibleSignalIds.size()) {
             // removeAll() cannot be used
             eligibleSignalIds.forEach(allEligibleSignalIds::remove);
-            // todo
+            if (!allEligibleSignalIds.isEmpty()) {
+                log.error("Check ids, as there are repetitions " + allEligibleSignalIds);
+            }
         }
     }
+
+    private static final Logger log = LoggerFactory.getLogger(CompositeSignalHandlerDispatcher.class);
 }

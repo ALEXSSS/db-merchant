@@ -3,6 +3,7 @@ package db.merchant.controller;
 import db.merchant.signal.DomainSpecificSignalHandlerDispatcher;
 import db.merchant.signal.database.AlgoConfiguration;
 import db.merchant.signal.database.AlgoConfigurationRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +24,10 @@ public class SignalController {
         this.repository = repository;
     }
 
+    @Operation(description = "Runs algorithm's handler by signal id")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void handleSignal(@PathVariable Integer id) {
+    public void handleSignal(@PathVariable int id) {
         signalHandler.handleSignal(id);
     }
 
@@ -33,12 +35,14 @@ public class SignalController {
      * for test only, for real life application would require proper authorization,
      * and separation of request/response types
      */
+    @Operation(description = "Saves new algo configuration")
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public AlgoConfiguration saveAlgoConfiguration(AlgoConfiguration configuration) {
         return repository.save(configuration);
     }
 
+    @Operation(description = "Returns all supported signals' ids")
     @GetMapping("/supported")
     public Set<Integer> getAllSupportedSignals() {
         return signalHandler.getSignalIds();

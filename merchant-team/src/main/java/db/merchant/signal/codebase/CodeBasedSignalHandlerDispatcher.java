@@ -2,6 +2,8 @@ package db.merchant.signal.codebase;
 
 import db.merchant.signal.DomainSpecificSignalHandlerDispatcher;
 import db.merchant.signal.codebase.handlers.AbstractCodebaseSignalHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,8 +29,14 @@ public class CodeBasedSignalHandlerDispatcher implements DomainSpecificSignalHan
                 .peek(
                         entry -> {
                             if (entry.getValue().size() != 1) {
-                                System.out.println();
-                                // todo log
+                                List<AbstractCodebaseSignalHandler> ids = entry.getValue();
+                                String implementations = ids.stream().map(AbstractCodebaseSignalHandler::getTask)
+                                        .collect(Collectors.joining(","));
+                                log.error("Signal ids must be unique, but for " + ids.get(0) +
+                                        " got " + ids.size() + " handlers, in implementations: " + implementations);
+                                throw new IllegalStateException(
+                                        "All code defined algo configurations must have unique id!"
+                                );
                             }
                         }
                 ).collect(Collectors.toMap(Map.Entry::getKey, it -> it.getValue().get(0)));
@@ -43,4 +51,6 @@ public class CodeBasedSignalHandlerDispatcher implements DomainSpecificSignalHan
     public Set<Integer> getSignalIds() {
         return handlers.keySet();
     }
+
+    private static final Logger log = LoggerFactory.getLogger(CodeBasedSignalHandlerDispatcher.class);
 }

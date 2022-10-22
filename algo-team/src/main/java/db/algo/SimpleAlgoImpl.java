@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 /**
  * This is implemented in a third-party library and we cannot change it.
  * <p>
- * I've not changed it logically, but only extracted interface, hopefully that wasn't
+ * I've not changed it logically, but extracted interface, hopefully that wasn't
  * forbidden.
  */
 @Component
