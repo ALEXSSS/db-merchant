@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:13.7-alpine
+    container_name: postgres
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    env_file:
+      - .env
+    volumes:
+      - ./postgres/init_databases.sql:/docker-entrypoint-initdb.d/init_databases.sql
+    #      if it's needed to store data between runs
+    #      - ./volume:/var/lib/postgresql/data:rw
+    ports:
+      - "5432:5432"
+
+  base_java_image:
+    build:
+      context: .
+      dockerfile: base_java_image/Dockerfile
+    image: base_java:v1
+
+  merchant:
+    container_name: merchant
+    depends_on:
+      - postgres
+    restart: always
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: merchant/Dockerfile
+    env_file:
+      - ./.env
+    links:
+      - "postgres:database"

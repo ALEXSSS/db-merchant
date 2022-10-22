@@ -3,10 +3,10 @@ spring:
   application:
     name: db-merchant
   datasource:
-    name: opportunity
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: postgres
+    name: merchant
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${MERCHANT_POSTGRES_DBNAME}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driverClassName: org.postgresql.Driver
     hikari:
       maximum-pool-size: 1 # now only one active session
@@ -17,3 +17,4 @@ server:
     threads.max: 50
     connection-timeout: 1s
     keep-alive-timeout: 1s
+  port: ${MERCHANT_PORT}
