@@ -51,7 +51,7 @@ public class CompositeSignalHandlerDispatcher implements DomainSpecificSignalHan
                     .handleSignal(signal)
             );
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported signal id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unsupported signal id");
         }
     }
 

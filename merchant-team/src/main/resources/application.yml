@@ -11,3 +11,9 @@ spring:
     hikari:
       maximum-pool-size: 1 # now only one active session
       connection-timeout: 10000 # 10 sec
+
+server:
+  tomcat:
+    threads.max: 50
+    connection-timeout: 1s
+    keep-alive-timeout: 1s

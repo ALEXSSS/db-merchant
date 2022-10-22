@@ -101,7 +101,7 @@ public class AlgoConfiguration {
         abstract void handle(Algo algo);
 
         @JsonTypeName("DO_ALGO")
-        static class DoAlgo extends AlgoStep {
+        public static class DoAlgo extends AlgoStep {
 
             @Override
             void handle(Algo algo) {
@@ -110,7 +110,7 @@ public class AlgoConfiguration {
         }
 
         @JsonTypeName("CANCEL_TRADES")
-        static class CancelTrades extends AlgoStep {
+        public static class CancelTrades extends AlgoStep {
 
             @Override
             void handle(Algo algo) {
@@ -119,7 +119,7 @@ public class AlgoConfiguration {
         }
 
         @JsonTypeName("REVERSE")
-        static class Reverse extends AlgoStep {
+        public static class Reverse extends AlgoStep {
 
             @Override
             void handle(Algo algo) {
@@ -128,7 +128,7 @@ public class AlgoConfiguration {
         }
 
         @JsonTypeName("SUBMIT_TO_MARKET")
-        static class SubmitToMarket extends AlgoStep {
+        public static class SubmitToMarket extends AlgoStep {
 
             @Override
             void handle(Algo algo) {
@@ -137,7 +137,7 @@ public class AlgoConfiguration {
         }
 
         @JsonTypeName("PERFORM_CALC")
-        static class PerformCalc extends AlgoStep {
+        public static class PerformCalc extends AlgoStep {
 
             @Override
             void handle(Algo algo) {
@@ -146,7 +146,7 @@ public class AlgoConfiguration {
         }
 
         @JsonTypeName("SET_UP")
-        static class SetUp extends AlgoStep {
+        public static class SetUp extends AlgoStep {
 
             @Override
             void handle(Algo algo) {
@@ -155,7 +155,7 @@ public class AlgoConfiguration {
         }
 
         @JsonTypeName("SET_ALGO_PARAM")
-        static class SetAlgoParam extends AlgoStep {
+        public static class SetAlgoParam extends AlgoStep {
             private int param;
             private int value;
 
