@@ -22,7 +22,7 @@ import java.util.List;
 @Configuration
 class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
 
-    // todo
+    // for convenience clean-migrate on not-prod envs
     @Profile("!prod")
     @Bean
     public FlywayMigrationInitializer initializer(Flyway flyway) {
@@ -32,13 +32,20 @@ class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
         });
     }
 
+    /**
+     * Allows us to define additional converters for json type in postgres
+     * <p>
+     * POSSIBLE FUTURE WORK:
+     * 1) put it in the separate library module
+     * 2) unify creation of other type converters
+     */
     @Override
     protected List<?> userConverters() {
         return Arrays.asList(new AlgoWritingConverter(), new AlgoReadingConverter());
     }
 
     @WritingConverter
-    static class AlgoWritingConverter implements Converter<AlgoConfiguration.AlgoSteps, PGobject> {
+    private static class AlgoWritingConverter implements Converter<AlgoConfiguration.AlgoSteps, PGobject> {
         @Override
         public PGobject convert(AlgoConfiguration.AlgoSteps value) {
             PGobject jsonObject = new PGobject();
@@ -56,7 +63,7 @@ class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
     }
 
     @ReadingConverter
-    static class AlgoReadingConverter implements Converter<PGobject, AlgoConfiguration.AlgoSteps> {
+    private static class AlgoReadingConverter implements Converter<PGobject, AlgoConfiguration.AlgoSteps> {
 
         @Override
         public AlgoConfiguration.AlgoSteps convert(PGobject source) {
@@ -73,5 +80,4 @@ class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
 
         private static final ObjectMapper mapper = new ObjectMapper();
     }
-
 }

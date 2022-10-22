@@ -6,6 +6,8 @@ import db.merchant.signal.database.AlgoConfigurationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/signal")
 public class SignalController {
@@ -27,11 +29,6 @@ public class SignalController {
         signalHandler.handleSignal(id);
     }
 
-    @GetMapping("/supported")
-    public void getAllSupportedSignals() {
-        signalHandler.getSignalIds();
-    }
-
     /**
      * for test only, for real life application would require proper authorization,
      * and separation of request/response types
@@ -40,5 +37,10 @@ public class SignalController {
     @ResponseStatus(HttpStatus.CREATED)
     public AlgoConfiguration saveAlgoConfiguration(AlgoConfiguration configuration) {
         return repository.save(configuration);
+    }
+
+    @GetMapping("/supported")
+    public Set<Integer> getAllSupportedSignals() {
+        return signalHandler.getSignalIds();
     }
 }
