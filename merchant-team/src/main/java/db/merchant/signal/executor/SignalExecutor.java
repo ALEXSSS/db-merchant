@@ -29,6 +29,7 @@ public class SignalExecutor {
                 new LinkedBlockingQueue<>(properties.queueCapacity),
                 runnable -> new Thread(runnable, "Signal processing thread"));
         pool.setRejectedExecutionHandler(new LogAndReportStatusPolicy());
+        pool.prestartAllCoreThreads();
         executor = pool;
     }
 

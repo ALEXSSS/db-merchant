@@ -6,13 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 /**
- * allows to
+ * 1) allows running postgres database with tests (purging database)
+ * 2) automatically set-ups mock mvc for convenience
  */
 @AutoConfigureMockMvc
 public class WebWithPostgresContainer {
+
+    @Autowired
+    protected MockMvc mockMvc;
 
     @Autowired
     public void setFlyway(Flyway flyway) {
