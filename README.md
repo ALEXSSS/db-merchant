@@ -1,6 +1,6 @@
 # DB MERCHANT
 
-Thank You that you are looking at my code, below I'll try to describe setup process and how to use given app.
+Thank You that you are looking at my code, below I'll try to describe setup process and how to use this app.
 ### How to run?
 
 1) `git clone` project

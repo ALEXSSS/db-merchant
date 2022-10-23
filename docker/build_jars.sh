@@ -4,7 +4,7 @@ set -e
 set -x
 
 echo "Current location: $(pwd)"
-(cd .. && mvn clean install)
+(cd .. && mvn clean install -DskipTests)
 ls -alh ../
 
 #rm -rf jars/*
