@@ -9,12 +9,12 @@ spring:
     password: ${POSTGRES_PASSWORD}
     driverClassName: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 1 # now only one active session
+      maximum-pool-size: 2 # now only two active session, to collect confs from db and for debug controller
       connection-timeout: 10000 # 10 sec
 
 server:
   tomcat:
     threads.max: 50
-    connection-timeout: 1s
+    connection-timeout: 1s # all request will be instantly submitted to the pool
     keep-alive-timeout: 1s
   port: ${MERCHANT_PORT}

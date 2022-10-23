@@ -12,9 +12,9 @@ import java.util.Set;
 
 /**
  * for tests only, for real life application would require proper authorization,
- * and separation of request/response types
+ * and separation of request/response dto types
  */
-@Profile("!prod") // to illustrate that not for prod
+@Profile("!prod") // to illustrate that this is not for prod
 @RestController
 @RequestMapping("/api/signal")
 public class DebugController {

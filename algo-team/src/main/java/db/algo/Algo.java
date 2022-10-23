@@ -1,6 +1,7 @@
 package db.algo;
 
 public interface Algo {
+
     void doAlgo();
 
     void cancelTrades();
