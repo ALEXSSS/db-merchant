@@ -6,6 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * SignalHandlers added by dev team
+ * <p>
+ * By inheritance of this class and putting implementation in the handler folder, bean
+ * will be automatically registered by spring container.
+ * <p>
+ * Other possibilities were to create similar functionality by BPP, but it is unnecessary
+ * in the given case.
  */
 @PropagatedComponent
 public abstract class AbstractCodebaseSignalHandler {

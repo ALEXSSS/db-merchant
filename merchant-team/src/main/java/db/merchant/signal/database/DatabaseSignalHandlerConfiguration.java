@@ -51,15 +51,13 @@ class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
             PGobject jsonObject = new PGobject();
             jsonObject.setType("json");
             try {
-                jsonObject.setValue(mapper.writeValueAsString(value));
+                jsonObject.setValue(MAPPER.writeValueAsString(value));
             } catch (Exception e) {
                 // ignore impossible checked exceptions
                 throw new RuntimeException(e);
             }
             return jsonObject;
         }
-
-        private static final ObjectMapper mapper = new ObjectMapper();
     }
 
     @ReadingConverter
@@ -70,14 +68,14 @@ class DatabaseSignalHandlerConfiguration extends AbstractJdbcConfiguration {
             String value = source.getValue();
             AlgoConfiguration.AlgoSteps result = null;
             try {
-                result = mapper.readValue(value, AlgoConfiguration.AlgoSteps.class);
+                result = MAPPER.readValue(value, AlgoConfiguration.AlgoSteps.class);
             } catch (JsonProcessingException e) {
                 // ignore impossible checked exceptions
                 throw new RuntimeException(e);
             }
             return result;
         }
-
-        private static final ObjectMapper mapper = new ObjectMapper();
     }
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 }

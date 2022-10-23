@@ -11,17 +11,12 @@
 
     <artifactId>algo-team</artifactId>
 
-    <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
-    </properties>
-
     <!-- I haven't placed in the parent pom
     as in the future library modules without web, can be created-->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <!--Test-->
         <dependency>

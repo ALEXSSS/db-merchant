@@ -8,7 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Database entity description, containing steps to run a particular handler.
@@ -179,6 +181,51 @@ public class AlgoConfiguration {
             void handle(Algo algo) {
                 algo.setAlgoParam(param, value);
             }
+        }
+    }
+
+    public static AlgoConfigurationBuilder builder() {
+        return new AlgoConfigurationBuilder();
+    }
+
+    public static class AlgoConfigurationBuilder {
+
+        private final AlgoConfiguration algoConfiguration = new AlgoConfiguration();
+
+        public AlgoConfiguration build() {
+            return algoConfiguration;
+        }
+
+        public AlgoConfigurationBuilder withId(int id) {
+            algoConfiguration.setId(id);
+            return this;
+        }
+
+        public AlgoConfigurationBuilder withTask(String task) {
+            algoConfiguration.setTask(task);
+            return this;
+        }
+
+        public AlgoConfigurationBuilder withAuthor(String author) {
+            algoConfiguration.setAuthor(author);
+            return this;
+        }
+
+        public AlgoConfigurationBuilder withDescription(String description) {
+            algoConfiguration.setDescription(description);
+            return this;
+        }
+
+        public AlgoConfigurationBuilder withSteps(AlgoSteps steps) {
+            algoConfiguration.setSteps(steps);
+            return this;
+        }
+
+        public AlgoConfigurationBuilder withStepsArray(AlgoStep... steps) {
+            AlgoSteps algoSteps = new AlgoSteps();
+            algoSteps.setSteps(Arrays.stream(steps).collect(Collectors.toList()));
+            algoConfiguration.setSteps(algoSteps);
+            return this;
         }
     }
 }
