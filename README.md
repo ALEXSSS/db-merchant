@@ -1,31 +1,31 @@
 # DB MERCHANT
 
-Thank You that you are looking at my code, below I'll try to describe setup process and how to use this app.
+Thank You that you are looking at my code, below I'll try to describe the setup process and how to use this app.
 ### How to run?
 
 1) `git clone` project
 2) Make sure that ports `8080` and `5432` are free
-3) Run docker-compose by script
+3) Run `docker-compose` by executing script `./restart.sh`
 ```bash
 cd docker
 ./restart.sh
 ```
 
-In case that your env doesn't have `maven` installed, then you can try such steps.
+In case that your env doesn't have `maven` installed, then you can try a command below.
 1) run `./restart_from_zip.sh`
-I've place assembled artifact in the jar folder
+I've placed an assembled artifact in the jar folder
 
 ### How to interact with?
 
-Visit `http://localhost:8080` you will be automatically redirected to swagger
+Visit `http://localhost:8080` You will be automatically redirected to the swagger
 
 
 ![img.png](images/img.png)
 
-As you can see there are 4 endpoints
+As You can see there are 4 endpoints
 
 1) `GET /api/signal/{id}` - invokes handler of given signal
-2) (DEBUG) `POST /api/signal` - allows create database persisted configurations
+2) (DEBUG) `POST /api/signal` - creates database persisted configurations
 ```json
 {
   "id": 101,
@@ -44,17 +44,17 @@ As you can see there are 4 endpoints
   }
 }
 ```
-3) (DEBUG) `GET /api/signal/supporte` - returns all signals service is able to handle
-4) (DEBUG) `GET /api/signal/{id}` - deletes database based signal
+3) (DEBUG) `GET /api/signal/supporte` - returns all signals supported by service
+4) (DEBUG) `DELETE /api/signal/{id}` - deletes a database based signal by id
 
 ### How does it work?
 
 Currently, there are two main types of handlers
-1) code-based to add by dev-team
-2) database-based to add by analysts
+1) code-based are added by dev-team
+2) database-based are added by analysts
 
 Code-based configurations are added just by implementing class `AbstractCodebaseSignalHandler` 
-and placing them in handlers folder, after that they will be seen by spring container during start-up.
+and placing them in the folder `handlers`, after that they will be seen by spring container during start-up.
 ```java
 public class ExampleCodebaseSignalHandler extends AbstractCodebaseSignalHandler {
 
@@ -72,7 +72,7 @@ public class ExampleCodebaseSignalHandler extends AbstractCodebaseSignalHandler 
 ```
 Database-based they are added as records in the database, or can be added by mentioned endpoints above.
 
-Other types of providers can be easily implemented, for example, from web(api) providers, Excel files.
+Other types of providers can be easily implemented, for example, from Web(api) providers, Excel files.
 Just by implementing `DomainSpecificSignalHandlerDispatcher`.
 
 ### Feel free to contact me in case of any problems with setup!
